@@ -11,13 +11,35 @@
             "date": "2022-01-15",
             "src": "images/Baidoa/30-ka-road-2022-01-15_before.jpg",
             "source": "Google Earth",
-            "note": "Dry season view"
+            "note": "Before the construction."
           },
           "after": {
             "date": "2025-01-20",
             "src": "images/Baidoa/30-ka-road-2025-01-20_after.jpg",
             "source": "Google Earth",
-            "note": "Construction visible near outlet"
+            "note": "After the construction."
+          }
+        }
+      ]
+    },
+	{
+      "city": "Baidoa",
+      "subproject": "Hanano Road 7",
+      "type": "Road",
+      "pairs": [
+        {
+          "title": "Hanano Road 7 (Jan 2022 vs Jan 2025)",
+          "before": {
+            "date": "2022-01-15",
+            "src": "images/Baidoa/hanano-road-2025-01-01_before.png",
+            "source": "Google Earth",
+            "note": "Before the construction."
+          },
+          "after": {
+            "date": "2025-01-20",
+            "src": "images/Baidoa/hanano-road-2022-09-01_after.png",
+            "source": "Google Earth",
+            "note": "After the construction."
           }
         }
       ]
@@ -28,18 +50,40 @@
       "type": "Road",
       "pairs": [
         {
-          "title": "30th Street and Tawfif Roads (Aug 2021 vs Jan 2025)",
+          "title": "30th Street and Tawfiq Roads (Aug 2021 vs Jan 2025)",
           "before": {
             "date": "2021-08-01",
             "src": "images/Garowe/30th-street+Tawfiq-roads-2021-08-01_before.png",
             "source": "Google Earth",
-            "note": "Dry season view"
+            "note": "Before the construction."
           },
           "after": {
             "date": "2025-01-20",
             "src": "images/Garowe/30th-street+Tawfiq-roads-2025-01-15_after.png",
             "source": "Google Earth",
-            "note": "Construction visible near outlet"
+            "note": "After the construction."
+          }
+        }
+      ]
+    },
+	{
+      "city": "Garowe",
+      "subproject": "Gambol Bridge + Main Road roundabout",
+      "type": "Road",
+      "pairs": [
+        {
+          "title": "Gambol Bridge + Main Road roundabout (Aug 2021 vs Jan 2025)",
+          "before": {
+            "date": "2023-04-01",
+            "src": "images/Garowe/Gambolbridge+roundabout-2023-04-15_before.png",
+            "source": "Google Earth",
+            "note": "Before the construction."
+          },
+          "after": {
+            "date": "2025-01-20",
+            "src": "images/Garowe/Gambolbridge+roundabout-2025-01-15_after.png",
+            "source": "Google Earth",
+            "note": "After the construction."
           }
         }
       ]

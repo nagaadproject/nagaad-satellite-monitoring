@@ -1,0 +1,823 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Nagaad Project Before/After Satellite Comparisons</title>
+
+  <!-- Google Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg: #f7f9fc;
+      --card: #ffffff;
+      --stroke: #e6eaf2;
+      --text: #0f172a;
+      --muted: #64748b;
+
+      --blue: #2563eb;
+      --orange: #f97316;
+
+      --shadow: 0 14px 30px rgba(15, 23, 42, 0.08);
+      --radius: 18px;
+
+      --pos: 50%;
+    }
+
+    *{ box-sizing: border-box; }
+    body{
+      margin:0;
+      font-family: "Inter", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: radial-gradient(900px 500px at 10% 0%, rgba(37,99,235,0.10), transparent 55%),
+                  radial-gradient(900px 500px at 90% 10%, rgba(249,115,22,0.10), transparent 55%),
+                  var(--bg);
+      color: var(--text);
+    }
+
+    /* ---------- Layout ---------- */
+    .app{
+      max-width: 1500px;
+      margin: 0 auto;
+      padding: 18px;
+      display: grid;
+      grid-template-columns: 420px 1fr;
+      gap: 16px;
+      align-items: start;
+      transition: grid-template-columns .18s ease;
+    }
+    @media (max-width: 1050px){
+      .app{ grid-template-columns: 1fr; }
+    }
+
+    /* Collapsed state on desktop */
+    .app.collapsed{
+      grid-template-columns: 1fr;
+    }
+    .app.collapsed .browsePanel{
+      display:none;
+    }
+
+    /* ---------- Header ---------- */
+    .header{
+      grid-column: 1 / -1;
+      background: linear-gradient(180deg, rgba(255,255,255,0.90), rgba(255,255,255,0.72));
+      border: 1px solid var(--stroke);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 14px 16px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 12px;
+    }
+
+    .brand{
+      display:flex;
+      flex-direction:column;
+      gap: 4px;
+      min-width: 0;
+    }
+    .brand .title{
+      font-size: 16px;
+      font-weight: 950;
+      letter-spacing: 0.2px;
+      display:flex;
+      align-items:center;
+      gap: 10px;
+      flex-wrap:wrap;
+    }
+    .dot{
+      width: 10px; height: 10px; border-radius: 999px;
+      background: linear-gradient(135deg, var(--blue), var(--orange));
+      box-shadow: 0 0 0 5px rgba(37,99,235,0.10);
+      display:inline-block;
+    }
+    .brand .sub{
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.35;
+      max-width: 980px;
+    }
+
+    .rightHeader{
+      display:flex;
+      gap: 10px;
+      align-items:center;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+    }
+
+    .pill{
+      border: 1px solid var(--stroke);
+      background: #fff;
+      color: var(--muted);
+      padding: 8px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      white-space: nowrap;
+      display:flex;
+      align-items:center;
+      gap: 8px;
+    }
+    .pill strong{ color: var(--text); font-weight: 900; }
+
+    .btnSmall{
+      border: 1px solid var(--stroke);
+      background: #fff;
+      color: var(--text);
+      padding: 9px 10px;
+      border-radius: 999px;
+      cursor:pointer;
+      user-select:none;
+      font-size: 12px;
+      font-weight: 900;
+      transition: transform .05s ease, box-shadow .12s ease, border-color .12s ease, background .12s ease;
+      display:inline-flex;
+      align-items:center;
+      gap: 8px;
+      white-space: nowrap;
+    }
+    .btnSmall:hover{
+      border-color: rgba(37,99,235,0.35);
+      box-shadow: 0 10px 18px rgba(15,23,42,0.06);
+    }
+    .btnSmall:active{ transform: translateY(1px); }
+    .icon{
+      width: 18px; height: 18px;
+      border-radius: 999px;
+      display:grid;
+      place-items:center;
+      background: rgba(37,99,235,0.10);
+      border: 1px solid rgba(37,99,235,0.18);
+      color: var(--blue);
+      font-weight: 900;
+      line-height: 1;
+    }
+    .icon.orange{
+      background: rgba(249,115,22,0.12);
+      border: 1px solid rgba(249,115,22,0.22);
+      color: var(--orange);
+    }
+
+    /* ---------- Panels ---------- */
+    .panel{
+      border-radius: var(--radius);
+      background: var(--card);
+      border: 1px solid var(--stroke);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+    .panelHead{
+      padding: 14px 14px 12px;
+      border-bottom: 1px solid var(--stroke);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 10px;
+      background: linear-gradient(180deg, rgba(37,99,235,0.06), rgba(255,255,255,0.0));
+    }
+    .panelHead h2{
+      margin:0;
+      font-size: 14px;
+      font-weight: 950;
+      letter-spacing: 0.2px;
+    }
+    .panelBody{ padding: 14px; }
+
+    /* ---------- Inputs ---------- */
+    label{
+      display:block;
+      font-size: 12px;
+      color: var(--muted);
+      margin: 10px 0 6px;
+      font-weight: 800;
+    }
+    input, select{
+      width: 100%;
+      padding: 11px 12px;
+      border-radius: 12px;
+      border: 1px solid var(--stroke);
+      background: #fff;
+      color: var(--text);
+      outline: none;
+      transition: box-shadow .12s ease, border-color .12s ease;
+    }
+    input::placeholder{ color: #94a3b8; }
+    input:focus, select:focus{
+      border-color: rgba(37,99,235,0.45);
+      box-shadow: 0 0 0 4px rgba(37,99,235,0.14);
+    }
+
+    .filtersRow{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    @media (max-width: 1050px){
+      .filtersRow{ grid-template-columns: 1fr; }
+    }
+
+    .actions{
+      display:flex;
+      gap: 10px;
+      margin-top: 12px;
+      flex-wrap:wrap;
+    }
+    .btn{
+      border: 1px solid var(--stroke);
+      background: #fff;
+      color: var(--text);
+      padding: 10px 12px;
+      border-radius: 12px;
+      cursor:pointer;
+      user-select:none;
+      font-size: 13px;
+      font-weight: 950;
+      transition: transform .05s ease, box-shadow .12s ease, border-color .12s ease, background .12s ease;
+      flex: 1;
+      min-width: 140px;
+      text-align:center;
+    }
+    .btn:hover{
+      border-color: rgba(37,99,235,0.35);
+      box-shadow: 0 10px 18px rgba(15,23,42,0.06);
+    }
+    .btn:active{ transform: translateY(1px); }
+    .btn.primary{
+      border-color: rgba(37,99,235,0.38);
+      background: linear-gradient(180deg, rgba(37,99,235,0.10), rgba(255,255,255,0.0));
+    }
+
+    /* ---------- List ---------- */
+    .list{
+      margin-top: 12px;
+      display:grid;
+      gap: 10px;
+      max-height: 58vh;
+      overflow:auto;
+      padding-right: 4px;
+    }
+    .list::-webkit-scrollbar{ width: 10px; }
+    .list::-webkit-scrollbar-thumb{ background: #dde3ee; border-radius: 999px; }
+    .list::-webkit-scrollbar-track{ background: transparent; }
+
+    .cardItem{
+      border: 1px solid var(--stroke);
+      background: #fff;
+      border-radius: 14px;
+      padding: 12px;
+      cursor:pointer;
+      transition: transform .12s ease, box-shadow .12s ease, border-color .12s ease;
+    }
+    .cardItem:hover{
+      transform: translateY(-1px);
+      box-shadow: 0 10px 18px rgba(15,23,42,0.06);
+      border-color: rgba(37,99,235,0.28);
+    }
+    .cardItem.active{
+      border-color: rgba(37,99,235,0.55);
+      box-shadow: 0 0 0 4px rgba(37,99,235,0.12);
+    }
+    .cardItem .t{
+      font-weight: 950;
+      font-size: 13px;
+      line-height: 1.25;
+    }
+    .cardItem .s{
+      margin-top: 8px;
+      display:flex;
+      flex-wrap:wrap;
+      gap: 8px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .tag{
+      border: 1px solid var(--stroke);
+      background: #f8fafc;
+      padding: 5px 8px;
+      border-radius: 999px;
+      font-size: 11px;
+      color: #334155;
+      display:inline-flex;
+      align-items:center;
+      gap: 6px;
+    }
+    .tag i{
+      width: 8px; height: 8px; border-radius: 999px; display:inline-block;
+      background: rgba(37,99,235,0.65);
+    }
+    .tag.orange i{ background: rgba(249,115,22,0.75); }
+
+    .smallMuted{
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.4;
+      margin-top: 12px;
+    }
+
+    /* ---------- Viewer ---------- */
+    .viewerWrap{
+      padding: 14px;
+      display:grid;
+      gap: 12px;
+    }
+
+    .hint{
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.35;
+    }
+
+    .compare{
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      border-radius: var(--radius);
+      overflow:hidden;
+      border: 1px solid var(--stroke);
+      background: #f1f5f9;
+      box-shadow: var(--shadow);
+      user-select: none;
+    }
+    .compare img{
+      position:absolute;
+      inset:0;
+      width:100%;
+      height:100%;
+      object-fit: contain;
+      pointer-events:none;
+      background: #f8fafc;
+    }
+    .after{
+      clip-path: inset(0 calc(100% - var(--pos)) 0 0);
+    }
+    .line{
+      position:absolute;
+      top:0; bottom:0;
+      left: var(--pos);
+      width: 3px;
+      transform: translateX(-50%);
+      background: rgba(37,99,235,0.85);
+      box-shadow: 0 0 0 1px rgba(15,23,42,0.15);
+      pointer-events:none;
+    }
+    .handle{
+      position:absolute;
+      left: var(--pos);
+      top: 50%;
+      width: 46px; height: 46px;
+      transform: translate(-50%,-50%);
+      border-radius: 999px;
+      background: #fff;
+      border: 1px solid var(--stroke);
+      display:grid;
+      place-items:center;
+      box-shadow: 0 14px 26px rgba(15,23,42,0.10);
+      pointer-events:none;
+    }
+    .handle svg{ width: 20px; height: 20px; opacity: .9; }
+    .handle .arrowL{ stroke: var(--blue); }
+    .handle .arrowR{ stroke: var(--orange); }
+
+    .compare input[type="range"]{
+      position:absolute; inset:0;
+      width:100%; height:100%;
+      opacity:0;
+      cursor: ew-resize;
+    }
+
+    .label{
+      position:absolute;
+      top: 12px;
+      padding: 8px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--stroke);
+      background: rgba(255,255,255,0.92);
+      color: #0f172a;
+      font-size: 12px;
+      font-weight: 900;
+      display:flex;
+      gap: 8px;
+      align-items:center;
+    }
+    .label .chip{
+      width: 10px; height: 10px; border-radius: 999px; display:inline-block;
+    }
+    .label.left{ left: 12px; }
+    .label.right{ right: 12px; }
+    .label.left .chip{ background: var(--blue); }
+    .label.right .chip{ background: var(--orange); }
+
+    .caption{
+      border-radius: var(--radius);
+      border: 1px solid var(--stroke);
+      background: #fff;
+      padding: 14px;
+      box-shadow: 0 10px 20px rgba(15,23,42,0.06);
+      display:grid;
+      gap: 10px;
+    }
+    .caption .capTitle{
+      font-weight: 950;
+      letter-spacing: 0.2px;
+      font-size: 14px;
+    }
+    .capBar{
+      height: 8px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, rgba(37,99,235,0.35), rgba(249,115,22,0.35));
+      border: 1px solid rgba(15,23,42,0.06);
+    }
+    .metaGrid{
+      display:grid;
+      grid-template-columns: 160px 1fr;
+      gap: 8px;
+      font-size: 12.5px;
+    }
+    .k{
+      background: #f8fafc;
+      border: 1px solid var(--stroke);
+      padding: 9px 10px;
+      border-radius: 12px;
+      font-weight: 950;
+      color: #334155;
+    }
+    .v{
+      background: #fff;
+      border: 1px solid var(--stroke);
+      padding: 9px 10px;
+      border-radius: 12px;
+      color: #0f172a;
+    }
+
+    .emptyState{
+      border: 1px dashed #cbd5e1;
+      border-radius: 14px;
+      padding: 14px;
+      background: #f8fafc;
+      color: #475569;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+    .emptyState b{ color: #0f172a; }
+
+    /* Sticky browse toggle on small screens */
+    @media (max-width: 1050px){
+      .browsePanel{ order: 2; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="app" id="app">
+    <div class="header">
+      <div class="brand">
+        <div class="title"><span class="dot"></span>Nagaad Project Before/After Satellite Comparisons</div>
+        <div class="sub">Infrastructure Investments • Static (folders + <code>data/db.json</code>) • Drag the slider to reveal change over time.</div>
+      </div>
+
+      <div class="rightHeader">
+        <button class="btnSmall" id="toggleBrowse" type="button" title="Collapse/Expand Browse & Filter">
+          <span class="icon" id="toggleIcon">⟷</span>
+          <span id="toggleText">Collapse</span>
+        </button>
+        <div class="pill" id="status"><strong>Status</strong> Loading…</div>
+      </div>
+    </div>
+
+    <!-- LEFT: Browse & Filter -->
+    <div class="panel browsePanel" id="browsePanel">
+      <div class="panelHead">
+        <h2>Browse & Filter</h2>
+        <div class="pill" id="countPill"><strong>0</strong> comparisons</div>
+      </div>
+      <div class="panelBody">
+        <label>Search</label>
+        <input id="search" placeholder="Search city, subproject, title…" />
+
+        <div class="filtersRow">
+          <div>
+            <label>City</label>
+            <select id="city"></select>
+          </div>
+          <div>
+            <label>Type</label>
+            <select id="type"></select>
+          </div>
+        </div>
+
+        <label>Subproject</label>
+        <select id="subproject"></select>
+
+        <div class="actions">
+          <button class="btn primary" id="clearFilters" type="button">Clear filters</button>
+          <button class="btn" id="jumpFirst" type="button">Open first result</button>
+        </div>
+
+        <div class="list" id="list"></div>
+
+        <div class="smallMuted">
+          Tip: Run via a local server (VS Code Live Server or <code>python -m http.server</code>) so the JSON loads correctly.
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: Viewer -->
+    <div class="panel">
+      <div class="panelHead">
+        <h2>Comparison Viewer</h2>
+        <div class="pill" id="viewerPill"><strong>Selection</strong> None</div>
+      </div>
+
+      <div class="viewerWrap">
+        <div class="hint">
+          How to use: Select a comparison from the left panel, then drag the slider left/right to reveal the <b>After</b> image over the <b>Before</b> image.
+        </div>
+
+        <div class="compare" id="compare" style="--pos:50%">
+          <img id="beforeImg" alt="Before image" />
+          <img id="afterImg" class="after" alt="After image" />
+
+          <div class="label left" id="beforeLabel"><span class="chip"></span>Before</div>
+          <div class="label right" id="afterLabel"><span class="chip"></span>After</div>
+
+          <div class="line"></div>
+          <div class="handle" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none">
+              <path d="M10 7L6 12L10 17" class="arrowL" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M14 7L18 12L14 17" class="arrowR" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+
+          <input id="slider" type="range" min="0" max="100" value="50" aria-label="Comparison slider" />
+        </div>
+
+        <div class="caption" id="caption">
+          <div class="emptyState">
+            <b>No comparison selected.</b><br/>
+            Use <b>Browse & Filter</b> to pick a city/subproject, then click a comparison card.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ---------- Elements
+    const app = document.getElementById("app");
+    const browsePanel = document.getElementById("browsePanel");
+    const toggleBrowseBtn = document.getElementById("toggleBrowse");
+    const toggleText = document.getElementById("toggleText");
+    const toggleIcon = document.getElementById("toggleIcon");
+
+    const statusEl = document.getElementById("status");
+    const countPill = document.getElementById("countPill");
+    const viewerPill = document.getElementById("viewerPill");
+
+    const elCity = document.getElementById("city");
+    const elSub  = document.getElementById("subproject");
+    const elType = document.getElementById("type");
+    const elSearch = document.getElementById("search");
+    const elList = document.getElementById("list");
+
+    const clearFiltersBtn = document.getElementById("clearFilters");
+    const jumpFirstBtn = document.getElementById("jumpFirst");
+
+    const compare = document.getElementById("compare");
+    const slider = document.getElementById("slider");
+    const beforeImg = document.getElementById("beforeImg");
+    const afterImg  = document.getElementById("afterImg");
+    const caption   = document.getElementById("caption");
+    const beforeLabel = document.getElementById("beforeLabel");
+    const afterLabel  = document.getElementById("afterLabel");
+
+    // ---------- Persist collapsed state
+    const STORAGE_KEY = "nagaad_compare_browse_collapsed";
+
+    function setCollapsed(collapsed){
+      if (collapsed){
+        app.classList.add("collapsed");
+        toggleText.textContent = "Browse";
+        toggleIcon.textContent = "☰";
+        toggleIcon.classList.add("orange");
+      } else {
+        app.classList.remove("collapsed");
+        toggleText.textContent = "Collapse";
+        toggleIcon.textContent = "⟷";
+        toggleIcon.classList.remove("orange");
+      }
+      localStorage.setItem(STORAGE_KEY, collapsed ? "1" : "0");
+    }
+
+    // Apply saved preference on load
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved === "1") setCollapsed(true);
+
+    toggleBrowseBtn.addEventListener("click", () => {
+      const isCollapsed = app.classList.contains("collapsed");
+      setCollapsed(!isCollapsed);
+    });
+
+    // ---------- Data
+    let rawItems = [];
+    let flatPairs = [];
+    let activeIndex = -1;
+
+    const uniq = (arr) => [...new Set(arr)].sort((a,b)=>a.localeCompare(b));
+    const opt  = (v) => `<option value="${v}">${v}</option>`;
+
+    function esc(s){
+      return (s ?? "").toString().replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+    }
+
+    function flatten(items){
+      const out = [];
+      for (const item of items){
+        const type = item.type || "Unspecified";
+        for (const pair of item.pairs){
+          out.push({
+            city: item.city,
+            subproject: item.subproject,
+            type,
+            title: pair.title || `${item.subproject} (${pair.before?.date} vs ${pair.after?.date})`,
+            before: pair.before,
+            after: pair.after
+          });
+        }
+      }
+      return out;
+    }
+
+    function setSelectOptions(){
+      elCity.innerHTML = uniq(["All", ...rawItems.map(x => x.city)]).map(opt).join("");
+      elSub.innerHTML  = uniq(["All", ...rawItems.map(x => x.subproject)]).map(opt).join("");
+      elType.innerHTML = uniq(["All", ...rawItems.map(x => x.type || "Unspecified")]).map(opt).join("");
+      elCity.value = "All"; elSub.value = "All"; elType.value = "All";
+    }
+
+    function matches(p){
+      const city = elCity.value;
+      const sub  = elSub.value;
+      const type = elType.value;
+      const q = elSearch.value.trim().toLowerCase();
+
+      if (city !== "All" && p.city !== city) return false;
+      if (sub  !== "All" && p.subproject !== sub) return false;
+      if (type !== "All" && p.type !== type) return false;
+
+      if (q){
+        const hay = `${p.city} ${p.subproject} ${p.type} ${p.title}`.toLowerCase();
+        if (!hay.includes(q)) return false;
+      }
+      return true;
+    }
+
+    // ---------- Slider
+    function setPos(v){
+      compare.style.setProperty("--pos", v + "%");
+      slider.value = v;
+    }
+    slider.addEventListener("input", e => setPos(Number(e.target.value)));
+    setPos(50);
+
+    // click-to-jump (user friendly)
+    compare.addEventListener("pointerdown", (e) => {
+      const rect = compare.getBoundingClientRect();
+      const x = Math.min(Math.max(0, e.clientX - rect.left), rect.width);
+      const pct = Math.round((x / rect.width) * 100);
+      setPos(pct);
+    });
+
+    // ---------- Captions
+    function setCaption(p){
+      const b = p.before, a = p.after;
+
+      beforeLabel.innerHTML = `<span class="chip"></span>Before • ${esc(b.date || "—")}`;
+      afterLabel.innerHTML  = `<span class="chip"></span>After • ${esc(a.date || "—")}`;
+      viewerPill.innerHTML  = `<strong>${esc(p.city)}</strong> ${esc(p.subproject)}`;
+
+      caption.innerHTML = `
+        <div class="capTitle">${esc(p.title)}</div>
+        <div class="capBar"></div>
+        <div class="metaGrid">
+          <div class="k">City</div><div class="v">${esc(p.city)}</div>
+          <div class="k">Subproject</div><div class="v">${esc(p.subproject)}</div>
+          <div class="k">Type</div><div class="v">${esc(p.type)}</div>
+
+          <div class="k">Before</div>
+          <div class="v">
+            <div><strong>Date:</strong> ${esc(b.date || "—")}</div>
+            <div><strong>Source:</strong> ${esc(b.source || "—")}</div>
+            <div><strong>Notes:</strong> ${esc(b.note || "—")}</div>
+          </div>
+
+          <div class="k">After</div>
+          <div class="v">
+            <div><strong>Date:</strong> ${esc(a.date || "—")}</div>
+            <div><strong>Source:</strong> ${esc(a.source || "—")}</div>
+            <div><strong>Notes:</strong> ${esc(a.note || "—")}</div>
+          </div>
+        </div>
+      `;
+    }
+
+    // ---------- Rendering list
+    function renderList(){
+      const filtered = flatPairs.filter(matches);
+      countPill.innerHTML = `<strong>${filtered.length}</strong> comparisons`;
+
+      elList.innerHTML = filtered.map(p => `
+        <div class="cardItem ${p._idx === activeIndex ? "active" : ""}" data-idx="${p._idx}">
+          <div class="t">${esc(p.title)}</div>
+          <div class="s">
+            <span class="tag"><i></i>${esc(p.city)}</span>
+            <span class="tag orange"><i></i>${esc(p.subproject)}</span>
+            <span class="tag"><i></i>${esc(p.type)}</span>
+            <span class="tag orange"><i></i>${esc(p.before.date)} → ${esc(p.after.date)}</span>
+          </div>
+        </div>
+      `).join("");
+
+      elList.querySelectorAll(".cardItem").forEach(div => {
+        div.addEventListener("click", () => {
+          showPair(Number(div.dataset.idx));
+          // Helpful: auto-collapse on small screens after selection
+          if (window.matchMedia("(max-width: 1050px)").matches) setCollapsed(true);
+        });
+      });
+
+      // keep selection if still visible; otherwise clear highlight
+      const stillVisible = filtered.some(x => x._idx === activeIndex);
+      if (!stillVisible) activeIndex = -1;
+    }
+
+    function showPair(idx){
+      const p = flatPairs[idx];
+      if (!p) return;
+
+      activeIndex = idx;
+
+      beforeImg.src = p.before.src;
+      afterImg.src  = p.after.src;
+
+      setPos(50);
+      setCaption(p);
+      renderList();
+    }
+
+    // ---------- User-friendly actions
+    function clearFilters(){
+      elSearch.value = "";
+      elCity.value = "All";
+      elSub.value = "All";
+      elType.value = "All";
+      activeIndex = -1;
+      renderList();
+    }
+
+    function openFirst(){
+      const filtered = flatPairs.filter(matches);
+      if (filtered.length) showPair(filtered[0]._idx);
+    }
+
+    clearFiltersBtn.addEventListener("click", clearFilters);
+    jumpFirstBtn.addEventListener("click", openFirst);
+
+    [elCity, elSub, elType].forEach(el => el.addEventListener("change", () => { activeIndex = -1; renderList(); }));
+    elSearch.addEventListener("input", () => { activeIndex = -1; renderList(); });
+
+    // ---------- Init
+    async function init(){
+      statusEl.innerHTML = `<strong>Status</strong> Loading…`;
+      const res = await fetch("data/db.json", { cache: "no-store" });
+      const data = await res.json();
+
+      rawItems = data.items || [];
+      flatPairs = flatten(rawItems).map((p,i)=> ({...p, _idx:i}));
+
+      setSelectOptions();
+      statusEl.innerHTML = `<strong>Status</strong> Ready`;
+
+      // Auto-open first result for user friendliness
+      renderList();
+      openFirst();
+    }
+
+    init().catch(err => {
+      console.error(err);
+      statusEl.innerHTML = `<strong>Status</strong> Failed`;
+      document.body.innerHTML = `
+        <div style="max-width:900px;margin:30px auto;padding:18px;font-family:Inter,system-ui;background:#fff;border:1px solid #e6eaf2;border-radius:16px;">
+          <h2 style="margin:0 0 6px;">Failed to load <code>data/db.json</code></h2>
+          <p style="margin:0;color:#64748b;line-height:1.5;">
+            Please run the folder via a local server (VS Code Live Server or <code>python -m http.server</code>),
+            then open <code>http://localhost:8000</code> (or the port shown).
+          </p>
+        </div>`;
+    });
+  </script>
+</body>
+</html>

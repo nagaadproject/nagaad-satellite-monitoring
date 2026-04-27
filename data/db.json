@@ -31,13 +31,13 @@
           "title": "Hanano Road 7 (Jan 2022 vs Jan 2025)",
           "before": {
             "date": "2022-01-15",
-            "src": "images/Baidoa/hanano-road-2025-01-01_before.png",
+            "src": "images/Baidoa/hanano-road-2022-09-01_after.png",
             "source": "Google Earth",
             "note": "Before the construction."
           },
           "after": {
             "date": "2025-01-20",
-            "src": "images/Baidoa/hanano-road-2022-09-01_after.png",
+            "src": "images/Baidoa/hanano-road-2025-01-01_before.png",
             "source": "Google Earth",
             "note": "After the construction."
           }
